@@ -28,7 +28,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
-class StreamApiTest {
+class StreamApi {
 
     @Test
     void filter() {
