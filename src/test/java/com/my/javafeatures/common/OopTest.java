@@ -40,7 +40,7 @@ public class OopTest {
         String city = "Minsk";
         String street = "Kirova";
         String number = "2";
-        String address = House.AddressDefinerStatic.defineAddress(city, street, number);
+        String address = new House.AddressDefinerStatic().defineAddress(city, street, number);
 
         house.new AddressDefiner().forceChangeAddress(address);
         assertThat(house.getAddress(), not(House.DEFAULT_ADDRESS));

@@ -62,7 +62,7 @@ public class House {
     }
 
     public static class AddressDefinerStatic {
-        public static String defineAddress(String city, String street, String number) {
+        public String defineAddress(String city, String street, String number) {
             return StringUtils.isAllBlank(city, street, number)
                     ? String.format("One of passed parameter is blank. %s", DEFAULT_ADDRESS)
                     : String.format("г. %s, ул. %s %s", city, street, number);
