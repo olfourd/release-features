@@ -57,7 +57,7 @@ public class House {
         }
 
         public void forceChangeAddress(String newAddress) {
-            address = newAddress;
+            House.this.address = newAddress;
         }
     }
 
