@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ConcurrentCollections {
@@ -21,6 +22,7 @@ public class ConcurrentCollections {
     private static final List<String> TEST_DATA = List.of("Java", "Collection", ELEMENT_TO_REPLACE);
 
     @Test
+    @Disabled
     void copyOnWriteArrayList() {
         Assertions.assertThrows(ConcurrentModificationException.class, () -> {
             final var simpleList = new ArrayList<>(TEST_DATA);
