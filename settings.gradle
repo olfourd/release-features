@@ -2,3 +2,4 @@ rootProject.name = 'learning'
 
 include 'java-new-features'
 include 'creational-patterns'
+include 'structural-patterns'
