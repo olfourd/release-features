@@ -1,8 +1,10 @@
-package com.my.bridge.model.remote;
+package com.my.bridge;
 
 import com.my.bridge.model.device.Device;
 import com.my.bridge.model.device.Radio;
 import com.my.bridge.model.device.Tv;
+import com.my.bridge.model.remote.AdvancedRemoteController;
+import com.my.bridge.model.remote.BasicRemoteController;
 
 public class Client {
 
