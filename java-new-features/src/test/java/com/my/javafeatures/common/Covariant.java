@@ -32,14 +32,17 @@ public class Covariant {
         contrvariant(citrusList);
 //        contrvariant(orangeList);
 
-//      массивы ковариантны todo: почему?
-        Object[] objects = new Object[] {};
-        String[] strings = new String[] {};
-        objects = strings;
+//      массивы ковариантны. в Java 1.0 не подумали об этом :)
+        Object[] objects = new String[10];
+        objects[0] = "some";
+        objects[1] = 1;
+        objects[2] = new Fruit();
 
-//        листы не ковариантны todo: почему?
-//        fruitList = citrusList;
-
+//        листы не ковариантны. т.к. в Java 1.2 уже поняли что это может быть проблемой и запретили на уровне компилятора
+//        List<Object> objectList = new ArrayList<String>();
+//        objectList.add("asda");
+//        objectList.add(1L);
+//        objectList.add(new Fruit());
     }
 
     private void invariant(List<Citrus> citruses) {
