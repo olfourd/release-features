@@ -127,4 +127,6 @@ class FunctionalInterfacesTest {
         private Long id;
         private String name;
     }
+
+//    some
 }
