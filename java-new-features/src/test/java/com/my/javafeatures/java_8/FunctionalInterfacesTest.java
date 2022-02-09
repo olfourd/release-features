@@ -30,7 +30,7 @@ class FunctionalInterfacesTest {
         assertThat(predicate.test("aaa"), is(Boolean.TRUE));
         assertThat(predicate.test("bbb"), is(Boolean.FALSE));
     }
-//some
+
     @Test
     void consumer() {
         var firstList = Lists.newArrayList();
@@ -128,6 +128,4 @@ class FunctionalInterfacesTest {
         private Long id;
         private String name;
     }
-
-//    some
 }
