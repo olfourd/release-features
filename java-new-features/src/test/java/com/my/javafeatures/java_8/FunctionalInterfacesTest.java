@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
-//1
 class FunctionalInterfacesTest {
 
     @Test
