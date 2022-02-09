@@ -125,6 +125,7 @@ class FunctionalInterfacesTest {
     @NoArgsConstructor
 //    some
     private static class TestData {
+//        some
         private Long id;
         private String name;
     }
