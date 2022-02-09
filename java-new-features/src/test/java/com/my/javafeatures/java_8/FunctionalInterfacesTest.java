@@ -13,13 +13,15 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
-public class FunctionalInterfaces {
+class FunctionalInterfacesTest {
 
     @Test
     void predicate() {
@@ -119,6 +121,8 @@ public class FunctionalInterfaces {
 
     @Builder
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     private static class TestData {
         private Long id;
         private String name;
