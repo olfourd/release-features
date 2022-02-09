@@ -99,6 +99,7 @@ class FunctionalInterfacesTest {
         assertThat(withIdData.getName(), is(str));
     }
 
+//    some
     @FunctionalInterface
     interface TestDataCreator<T extends String, E extends Long, R extends TestData> {
 
