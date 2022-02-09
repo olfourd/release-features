@@ -123,6 +123,7 @@ class FunctionalInterfacesTest {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+//    some
     private static class TestData {
         private Long id;
         private String name;
