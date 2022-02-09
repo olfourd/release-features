@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -120,6 +121,7 @@ class FunctionalInterfacesTest {
 
     @Builder
     @Data
+    @AllArgsConstructor
     private static class TestData {
         private Long id;
         private String name;
