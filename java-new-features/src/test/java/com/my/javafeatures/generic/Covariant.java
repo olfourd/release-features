@@ -1,4 +1,4 @@
-package com.my.javafeatures.common;
+package com.my.javafeatures.generic;
 
 import java.util.ArrayList;
 import java.util.List;
