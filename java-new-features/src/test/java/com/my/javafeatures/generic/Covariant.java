@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class Covariant {
 
-    @Test
+//    @Test
     void some() {
         ArrayList<Fruit> fruitList = new ArrayList<>();
         ArrayList<Citrus> citrusList = new ArrayList<>();

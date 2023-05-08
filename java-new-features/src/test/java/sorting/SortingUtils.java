@@ -1,8 +1,12 @@
 package sorting;
 
+import java.util.Random;
+
 public class SortingUtils {
 
-    public static int[] UNSORTED_ARRAY_WITH_REPLICAS = {4,2,6,7,3};
+    public static int[] UNSORTED_ARRAY_WITH_REPLICAS = new Random()
+            .ints(50, 1, 100)
+            .toArray();
 
     public static void swap(int[] array, int ind1, int ind2) {
         int tmp = array[ind1];
@@ -35,7 +39,7 @@ public class SortingUtils {
                 leftMarker++;
                 rightMarker--;
             }
-        } while (leftMarker  <= rightMarker);
+        } while (leftMarker <= rightMarker);
 
         // Выполняем рекурсивно для частей
         if (leftMarker < rightBorder) {
