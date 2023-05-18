@@ -30,8 +30,39 @@ public class SortingUtils {
             }
         }
 
-        swap(arr, end, i + 1);
-        return i + 1;
+        i++;
+        swap(arr, end, i);
+
+        return i;
+    }
+
+    public static void heapSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            shiftDown(arr, i, n);
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            swap(arr, 0, i);
+            shiftDown(arr, 0, i);
+        }
+    }
+
+    private static void shiftDown(int[] arr, int i, int n) {
+        int largest = i, left = i * 2 + 1, right = i * 2 + 2;
+
+        if (left < n && arr[left] > arr[largest]) {
+            largest = left;
+        }
+        if (right < n && arr[right] > arr[largest]) {
+            largest = right;
+        }
+
+        if (largest != i) {
+            swap(arr, largest, i);
+            shiftDown(arr, largest, n);
+        }
     }
 
     public static void swap(int[] arr, int from, int to) {

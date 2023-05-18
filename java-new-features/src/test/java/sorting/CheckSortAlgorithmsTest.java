@@ -7,12 +7,24 @@ import java.util.Arrays;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
 import static sorting.SortingUtils.UNSORTED_ARRAY_WITH_REPLICAS;
 import static sorting.SortingUtils.bubbleSort;
+import static sorting.SortingUtils.heapSort;
 import static sorting.SortingUtils.insertionSort;
 import static sorting.SortingUtils.mergeSort;
 import static sorting.SortingUtils.quickSort;
 import static sorting.SortingUtils.selectionSort;
 
 public class CheckSortAlgorithmsTest {
+
+    @Test
+    void heapSortTest() {
+        int[] input = Arrays.copyOf(UNSORTED_ARRAY_WITH_REPLICAS, UNSORTED_ARRAY_WITH_REPLICAS.length);
+        int[] expected = Arrays.copyOf(input, input.length);
+        Arrays.sort(expected, 0, input.length);
+
+        heapSort(input);
+
+        assertEquals("Arrays not equals", Arrays.toString(expected), Arrays.toString(input));
+    }
 
     @Test
     void quickSortTest() {
