@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Stream;
@@ -265,5 +266,82 @@ class HashingTasksTest {
         }
 
         return balloonCount;
+    }
+
+    @ParameterizedTest
+    @MethodSource("maximumSumTestData")
+    void maximumSumTest(int[] input, int expected) {
+        int actual = maximumSum(input);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> maximumSumTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{18, 43, 36, 13, 7}, 54),
+                Arguments.of(new int[]{10, 12, 19, 14}, -1)
+        );
+    }
+
+    public int maximumSum(int[] nums) {
+        Map<Integer, Integer> digitSumNumsMap = new HashMap<>();
+        int ans = -1;
+
+        for (int num : nums) {
+            int digitSum = getDigitSum(num);
+
+            if (digitSumNumsMap.containsKey(digitSum)) {
+                ans = Math.max(ans, num + digitSumNumsMap.get(digitSum));
+            }
+
+            digitSumNumsMap.put(digitSum, Math.max(digitSumNumsMap.getOrDefault(digitSum, 0), num));
+        }
+
+        return ans;
+    }
+
+    private int getDigitSum(int num) {
+        int digitSum = 0;
+        while (num > 0) {
+            digitSum += num % 10;
+            num /= 10;
+        }
+
+        return digitSum;
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "a:b:false",
+            "aa:ab:false",
+            "aa:aab:true",
+            "bg:efjbdfbdgfjhhaiigfhbaejahgfbbgbjagbddfgdiaigdadhcfcj: true"
+    }, delimiter = ':')
+    void canConstructTest(String ransomNote, String magazine, Boolean expected) {
+        boolean actual = canConstruct(ransomNote, magazine);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public boolean canConstruct(String ransomNote, String magazine) {
+        Map<Character, Integer> ransomNoteCharCountMap = toCharCountMap(ransomNote);
+        Map<Character, Integer> magazineCharCountMap = toCharCountMap(magazine);
+
+        for (Map.Entry<Character, Integer> entry : ransomNoteCharCountMap.entrySet()) {
+            if (!magazineCharCountMap.containsKey(entry.getKey()) ||
+                    magazineCharCountMap.get(entry.getKey()) < entry.getValue()) {
+                return Boolean.FALSE;
+            }
+        }
+
+        return Boolean.TRUE;
+    }
+
+    private Map<Character, Integer> toCharCountMap(String value) {
+        Map<Character, Integer> charCountMap = new HashMap<>();
+        for (Character character : value.toCharArray()) {
+            charCountMap.put(character, charCountMap.getOrDefault(character, 0) + 1);
+        }
+        return charCountMap;
     }
 }
