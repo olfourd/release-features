@@ -344,4 +344,73 @@ class HashingTasksTest {
         }
         return charCountMap;
     }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "aA:aAAbbbb:3",
+            "z:ZZ:0",
+    }, delimiter = ':')
+    void numJewelsInStonesTest(String jewels, String stones, int expected) {
+        int actual = numJewelsInStones(jewels, stones);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    /**
+     * You're given strings jewels representing the types of stones that are jewels, and stones representing
+     * the stones you have. Each character in stones is a type of stone you have.
+     * You want to know how many of the stones you have are also jewels.
+     * <p>
+     * Letters are case sensitive, so "a" is considered a different type of stone from "A".
+     */
+    public int numJewelsInStones(String jewels, String stones) {
+        Map<Character, Integer> stonesCharCountMap = new HashMap<>();
+        for (Character character : stones.toCharArray()) {
+            stonesCharCountMap.put(character, stonesCharCountMap.getOrDefault(character, 0) + 1);
+        }
+
+        int ans = 0;
+        for (Character character : jewels.toCharArray()) {
+            Integer count = stonesCharCountMap.get(character);
+            if (count != null && count > 0) {
+                ans += count;
+            }
+        }
+        return ans;
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "abcabcbb:3",
+            "bbbbb:1",
+            "pwwkew:3",
+            "aab:2",
+            "qrsvbspk:5"
+    }, delimiter = ':')
+    void lengthOfLongestSubstringTest(String s, Integer expected) {
+        int actual = lengthOfLongestSubstring(s);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    /**
+     * Given a string s, find the length of the longest substring without repeating characters.
+     */
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> slidingWindowChars = new HashSet<>();
+        int ans = 0;
+
+        for (int i = 0, j = 0; j < s.length(); ) {
+            char c = s.charAt(j);
+            if (slidingWindowChars.contains(c)) {
+                slidingWindowChars.remove(s.charAt(i));
+                i++;
+            } else {
+                j++;
+                slidingWindowChars.add(c);
+            }
+
+            ans = Math.max(ans, slidingWindowChars.size());
+        }
+
+        return ans;
+    }
 }
