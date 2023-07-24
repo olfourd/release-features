@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.gen5.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -412,5 +414,240 @@ class HashingTasksTest {
         }
 
         return ans;
+    }
+
+    @ParameterizedTest
+    @MethodSource("containsDuplicateTestData")
+    void containsDuplicateTest(int[] nums, boolean expected) {
+        boolean actual = containsDuplicate(nums);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> containsDuplicateTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 2, 3, 1}, true),
+                Arguments.of(new int[]{1, 2, 3, 4}, false),
+                Arguments.of(new int[]{1, 1, 1, 3, 3, 4, 3, 2, 4, 2}, true)
+        );
+    }
+
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> numsSet = new HashSet<>();
+        for (int num : nums) {
+            if (!numsSet.add(num)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @ParameterizedTest
+    @MethodSource("destCityTestData")
+    void destCityTest(List<List<String>> args, String expected) {
+        String actual = destCity(args);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> destCityTestData() {
+        return Stream.of(
+                Arguments.of(List.of(
+                        List.of("London", "New York"),
+                        List.of("New York", "Lima"),
+                        List.of("Lima", "Sao Paulo")
+                ), "Sao Paulo"),
+                Arguments.of(List.of(
+                        List.of("B", "C"),
+                        List.of("D", "B"),
+                        List.of("C", "A")
+                ), "A"),
+                Arguments.of(List.of(
+                        List.of("A", "Z")
+                ), "Z")
+        );
+    }
+
+    public String destCity(List<List<String>> paths) {
+        Map<String, String> fromToPathsMap = new HashMap<>();
+        for (List<String> fromToPath : paths) {
+            fromToPathsMap.put(fromToPath.get(0), fromToPath.get(1));
+        }
+
+        for (String destination : fromToPathsMap.values()) {
+            if (!fromToPathsMap.containsKey(destination)) {
+                return destination;
+            }
+        }
+
+        throw new IllegalArgumentException("data is not correct");
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "NES:false",
+            "NESWW:true",
+            "SS:false"
+    }, delimiter = ':')
+    void isPathCrossingTest(String path, Boolean expected) {
+        boolean actual = isPathCrossing(path);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    public boolean isPathCrossing(String path) {
+        Point prewPoint = new Point(0, 0);
+
+        Set<Point> pointSet = new HashSet<>();
+        pointSet.add(prewPoint);
+
+        for (int i = 0; i < path.length(); i++) {
+            Point point = prewPoint.makeStepReturnNew(path.charAt(i));
+            if (!pointSet.add(point)) {
+                return true;
+            }
+            prewPoint = point;
+        }
+        return false;
+    }
+
+    private record Point(Integer x, Integer y) {
+
+        public Point makeStepReturnNew(Character fix) {
+            Function<Point, Point> func = switch (fix) {
+                case 'N' -> point -> new Point(point.x, point.y + 1);
+                case 'S' -> point -> new Point(point.x, point.y - 1);
+                case 'W' -> point -> new Point(point.x - 1, point.y);
+                case 'E' -> point -> new Point(point.x + 1, point.y);
+                default -> throw new IllegalArgumentException("data is not correct");
+            };
+            return func.apply(this);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("sumOfUniqueTestData")
+    void sumOfUniqueTest(int[] nums, int expected) {
+        int actual = sumOfUniqueStream(nums);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> sumOfUniqueTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 2, 3, 2}, 4),
+                Arguments.of(new int[]{1, 1, 1, 1, 1}, 0),
+                Arguments.of(new int[]{1, 2, 3, 4, 5}, 15)
+        );
+    }
+
+    /**
+     * 1748. Sum of Unique Elements.
+     * <p>
+     * You are given an integer array nums.
+     * The unique elements of an array are the elements that appear exactly once in the array.
+     * <p>
+     * Return the sum of all the unique elements of nums.
+     */
+    public int sumOfUnique(int[] nums) {
+        Map<Integer, Integer> numsCountMap = new HashMap<>();
+
+        for (int num : nums) {
+            Integer val = numsCountMap.getOrDefault(num, 0);
+            numsCountMap.put(num, val + 1);
+        }
+
+        int ans = 0;
+        for (Map.Entry<Integer, Integer> entry : numsCountMap.entrySet()) {
+            if (entry.getValue() == 1) {
+                ans += entry.getKey();
+            }
+        }
+
+        return ans;
+    }
+
+    public int sumOfUniqueStream(int[] nums) {
+        return Arrays.stream(nums)
+                .boxed()
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .reduce(0, Integer::sum);
+    }
+
+    @ParameterizedTest
+    @MethodSource("findLuckyTestData")
+    void findLuckyTest(int[] arr, int expected) {
+        int actual = findLucky(arr);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> findLuckyTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{2, 2, 3, 4}, 2),
+                Arguments.of(new int[]{1, 2, 2, 3, 3, 3}, 3),
+                Arguments.of(new int[]{2, 2, 2, 3, 3}, -1)
+        );
+    }
+
+    /**
+     * 1394. Find Lucky Integer in an Array.
+     * Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
+     * Return the largest lucky integer in the array. If there is no lucky integer return -1.
+     */
+    public int findLucky(int[] arr) {
+        Map<Integer, Integer> numCountMap = new HashMap<>();
+
+        for (int num : arr) {
+            Integer val = numCountMap.getOrDefault(num, 0);
+            numCountMap.put(num, val + 1);
+        }
+        int ans = -1;
+
+        for (Map.Entry<Integer, Integer> entry : numCountMap.entrySet()) {
+            if (entry.getValue() == entry.getKey()) {
+                ans = Math.max(ans, entry.getKey());
+            }
+        }
+
+        return ans;
+    }
+
+    @ParameterizedTest
+    @MethodSource("uniqueOccurrencesTestData")
+    void uniqueOccurrencesTest(int[] arr, boolean expected) {
+        boolean actual = uniqueOccurrences(arr);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> uniqueOccurrencesTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 2, 2, 1, 1, 3}, true),
+                Arguments.of(new int[]{1, 2}, false),
+                Arguments.of(new int[]{-3, 0, 1, -3, 1, 1, 1, -3, 10, 0}, true)
+        );
+    }
+
+    /**
+     * 1207. Unique Number of Occurrences.
+     * <p>
+     * Given an array of integers arr, return true if the number of occurrences of each value in the array
+     * is unique or false otherwise.
+     */
+    public boolean uniqueOccurrences(int[] arr) {
+        Map<Integer, Integer> numCountMap = new HashMap<>();
+        for (int num : arr) {
+            Integer val = numCountMap.getOrDefault(num, 0);
+            numCountMap.put(num, val + 1);
+        }
+
+        Set<Integer> uniqueCount = new HashSet<>();
+        for (Map.Entry<Integer, Integer> entry : numCountMap.entrySet()) {
+            if (!uniqueCount.add(entry.getValue())) {
+                return Boolean.FALSE;
+            }
+        }
+
+        return Boolean.TRUE;
     }
 }
