@@ -1,12 +1,15 @@
 package leetcode.hashing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -644,6 +647,137 @@ class HashingTasksTest {
         Set<Integer> uniqueCount = new HashSet<>();
         for (Map.Entry<Integer, Integer> entry : numCountMap.entrySet()) {
             if (!uniqueCount.add(entry.getValue())) {
+                return Boolean.FALSE;
+            }
+        }
+
+        return Boolean.TRUE;
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "tree:eert",
+            "cccaaa:aaaccc",
+            "Aabb:bbAa",
+    }, delimiter = ':')
+    void frequencySortTest(String input, String expected) {
+        String actual = frequencySort(input);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    /**
+     * 451. Sort Characters By Frequency
+     * Given a string s, sort it in decreasing order based on the frequency of the characters.
+     * The frequency of a character is the number of times it appears in the string.
+     * <p>
+     * Return the sorted string. If there are multiple answers, return any of them.
+     */
+    public String frequencySort(String s) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        s.chars()
+                .mapToObj(value -> (char) value)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(
+                        Comparator.comparing(Map.Entry<Character, Long>::getValue, Comparator.reverseOrder())
+                                .thenComparing(Map.Entry::getKey, Comparator.naturalOrder())
+                )
+                .forEach(entry -> {
+                    for (int i = 0; i < entry.getValue(); i++) {
+                        stringBuilder.append(entry.getKey());
+                    }
+                });
+
+        return stringBuilder.toString();
+    }
+
+    @ParameterizedTest
+    @MethodSource("numIdenticalPairsTestData")
+    void numIdenticalPairsTest(int[] input, int expected) {
+        int actual = numIdenticalPairs(input);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    private static Stream<Arguments> numIdenticalPairsTestData() {
+        return Stream.of(
+                Arguments.of(new int[]{1, 2, 3, 1, 1, 3}, 4),
+                Arguments.of(new int[]{1, 1, 1, 1}, 6),
+                Arguments.of(new int[]{1, 2, 3}, 0)
+        );
+    }
+
+    /**
+     * 1512. Number of Good Pairs.
+     * <p>
+     * Given an array of integers nums, return the number of good pairs.
+     * A pair (i, j) is called good if nums[i] == nums[j] and i < j.
+     */
+    public int numIdenticalPairs(int[] nums) {
+        Map<Integer, List<Integer>> numIndexMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            numIndexMap.putIfAbsent(num, new ArrayList<>());
+            numIndexMap.get(num).add(i);
+        }
+
+        int ans = 0;
+        for (List<Integer> eqNumIndexes : numIndexMap.values()) {
+            for (int i = 1; i < eqNumIndexes.size(); i++) {
+                ans += eqNumIndexes.size() - i;
+            }
+        }
+
+        return ans;
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "egg:add:true",
+            "foo:bar:false",
+            "paper:title:true"
+    }, delimiter = ':')
+    void isIsomorphicTest(String s, String t, boolean expected) {
+        boolean actual = isIsomorphic(s, t);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    /**
+     * 205. Isomorphic Strings.
+     * Given two strings s and t, determine if they are isomorphic.
+     * <p>
+     * Two strings s and t are isomorphic if the characters in s can be replaced to get t.
+     * <p>
+     * All occurrences of a character must be replaced with another character while preserving the order of characters.
+     * No two characters may map to the same character, but a character may map to itself.
+     * <p>
+     * Constraints:
+     * 1 <= s.length <= 5 * 104
+     * t.length == s.length
+     * s and t consist of any valid ascii character.
+     */
+    public boolean isIsomorphic(String s, String t) {
+        Map<Character, List<Integer>> sCharIndexesMap = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char sChar = s.charAt(i);
+            sCharIndexesMap.putIfAbsent(sChar, new ArrayList<>());
+            sCharIndexesMap.get(sChar).add(i);
+        }
+
+        Map<Character, List<Integer>> tCharIndexesMap = new HashMap<>();
+        for (int i = 0; i < t.length(); i++) {
+            char tChar = t.charAt(i);
+            tCharIndexesMap.putIfAbsent(tChar, new ArrayList<>());
+            tCharIndexesMap.get(tChar).add(i);
+        }
+
+        if (sCharIndexesMap.size() != tCharIndexesMap.size()) {
+            return Boolean.FALSE;
+        }
+
+        for (int i = 0; i < s.length(); i++) {
+            if (!Objects.equals(sCharIndexesMap.get(s.charAt(i)), tCharIndexesMap.get(t.charAt(i)))) {
                 return Boolean.FALSE;
             }
         }
